@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class PaintZone : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    private void OnTriggerStay(Collider other)
+    {
+        var paintable = other.GetComponent<Paintable>();
+        if (paintable == null) { return; }
+
+        paintable.PaintAlpha();
+    }
 }

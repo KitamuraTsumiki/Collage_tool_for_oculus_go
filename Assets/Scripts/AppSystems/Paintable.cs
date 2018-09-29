@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class Paintable : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    [SerializeField]
+    private RenderTexture rt;
+    private Material mt;
+
+	private void Start () {
+        rt = new RenderTexture(256, 256, 16, RenderTextureFormat.ARGB32);
+        rt.Create();
+
+        mt = GetComponent<Renderer>().material;
+
+        mt.SetTexture("_Alpha", rt);
+    }
 	
-	// Update is called once per frame
-	void Update () {
+	private void Update () {
 		
 	}
+
+    public void PaintAlpha()
+    {
+
+    }
 }
