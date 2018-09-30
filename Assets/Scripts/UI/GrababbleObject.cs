@@ -57,4 +57,9 @@ public class GrababbleObject : MonoBehaviour, IPointableUIElement {
         relativePos = controller.InverseTransformPoint(transform.position);
         relativeRot = Quaternion.Inverse(transform.rotation) * controller.rotation;
     }
+
+    public void OverridePosition(Vector3 _pos)
+    {
+        relativePos = controller.InverseTransformPoint(_pos);
+    }
 }

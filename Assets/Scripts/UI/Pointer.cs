@@ -13,6 +13,8 @@ public class Pointer : MonoBehaviour {
 
     private IPointableUIElement lastPointedElement;
 
+    private Vector2 lastTouchPoint;
+
 	private void Start () {
         pointerLine = GetComponent<LineRenderer>();
 	}
@@ -102,8 +104,17 @@ public class Pointer : MonoBehaviour {
             pointableElement.OnClicked();
         }
 
+        bool isHeld = OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger);
+        if (isHeld)
+        {
+            //SetObjectDistFromController(nearestHit.collider.gameObject);
+        }
+
         bool isReleased = OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger);
-        if (isReleased) { pointableElement.OnReleased(); }
+        if (isReleased) {
+            pointableElement.OnReleased();
+            lastTouchPoint = Vector2.zero;
+        }
     }
 
     private void SetGrabbableObjectParam(GameObject _pointedObj)
@@ -114,4 +125,62 @@ public class Pointer : MonoBehaviour {
 
         grababbleObj.controller = transform;
     }
+
+    private void SetObjectDistFromController(GameObject _pointedObj)
+    {
+        if(!OVRInput.Get(OVRInput.RawTouch.LTouchpad) && !OVRInput.Get(OVRInput.RawTouch.RTouchpad)) { return; }
+
+        Vector2 rawDir = GetSwipeDirection();
+        Vector2 dirToCheck = GetSimplifiedDirection(rawDir);
+
+        if (!(dirToCheck == Vector2.up) && !(dirToCheck == Vector2.down)) { return; }
+
+        float distMul = 0.01f;
+        Vector3 vecToPointedObj = (_pointedObj.transform.position - transform.position);
+        float modifiedDist = vecToPointedObj.magnitude + distMul * rawDir.magnitude * dirToCheck.y;
+
+        Vector3 newPos = _pointedObj.transform.position + vecToPointedObj.normalized * modifiedDist;
+        _pointedObj.GetComponent<GrababbleObject>().OverridePosition(newPos);
+    }
+
+    private Vector2 GetSimplifiedDirection(Vector2 _rawDir)
+    {
+        Vector2[] directions = new Vector2[] {
+            Vector2.up,
+            Vector2.right,
+            Vector2.down,
+            Vector2.left
+        };
+
+        Vector2 swipeDir = _rawDir;
+        Vector2 direction = Vector2.zero;
+        float max = Mathf.NegativeInfinity;
+
+        foreach (Vector2 dir in directions)
+        {
+            float dot = Vector2.Dot(dir, swipeDir.normalized);
+
+            if (dot < max) { continue; }
+            max = dot;
+            direction = dir;
+        }
+
+        return direction;
+    }
+
+    private Vector2 GetTouchPadPos()
+    {
+        return OVRInput.Get(OVRInput.Axis2D.PrimaryTouchpad);
+    }
+
+    private Vector2 GetSwipeDirection()
+    {
+        Vector2 currTouchPos = GetTouchPadPos();
+        Vector2 swipeDir = lastTouchPoint != Vector2.zero ? currTouchPos - lastTouchPoint : Vector2.zero;
+
+        lastTouchPoint = currTouchPos;
+
+        return swipeDir;
+    }
+    
 }
