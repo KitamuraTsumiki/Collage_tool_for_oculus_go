@@ -12,7 +12,8 @@ public class PaintPoint : MonoBehaviour {
         var paintable = other.GetComponent<Paintable>();
         if (paintable == null) { return; }
 
-        float dist = GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
+        //float dist = GetComponent<MeshFilter>().sharedMesh.bounds.size.x;
+        float dist = transform.lossyScale.x;
         paintable.PaintAlpha(transform.position, brush, dist);
     }
 }

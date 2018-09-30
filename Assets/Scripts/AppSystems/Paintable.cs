@@ -38,6 +38,8 @@ public class Paintable : MonoBehaviour {
 
         RaycastHit hit;
         Vector3 rayDir = collider.ClosestPoint(_point) - _point;
+        Vector2 offset_temp = Vector2.zero;
+        
         if (!Physics.Raycast(_point, rayDir, out hit)) { return; }
         
         Vector2 offset = hit.textureCoord;
