@@ -4732,7 +4732,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0991ec3ae28222140b4d3930c250b3ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brush: {fileID: 2800000, guid: f4a24c7d00f82d54a8e048b6308adedc, type: 3}
+  brush: {fileID: 2800000, guid: c79986dc9f95ee348b3f02f29cc4d945, type: 3}
 --- !u!54 &2097034521
 Rigidbody:
   m_ObjectHideFlags: 0
