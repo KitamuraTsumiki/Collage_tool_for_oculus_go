@@ -13,25 +13,13 @@ public class AudioPlayFromStorage : MonoBehaviour {
 	private void Start () {
         audioSource = GetComponent<AudioSource>();
 
-        //string header = "file:///sdcard/Music/AudioLoadingTest/";
-        string header = "file:///sdcard/Music/";
-        //string fileName = "Ocean_Waves.mp3";
-        string fileName = "Totally_Happy_Ending.mp3";
+        //string header = "sdcard/Music/AudioLoadingTest/";
+        string header = "storage/self/primary/Music/AudioLoadingTest/";
+        string fileName = "Ocean_Waves.mp3";
         StartCoroutine(LoadAudio(header + fileName));
         
     }
-
-    private void Update()
-    {
-        /*
-        if (hasLoadingTried) { return; }
-        string header = "file:///sdcard/Music/AudioLoadingTest/";
-        string fileName = "Ocean_Waves.mp3";
-        StartCoroutine(LoadAudio(header + fileName));
-        hasLoadingTried = true;
-        */
-    }
-
+    
     private IEnumerator LoadAudio(string path)
     {
         if (!System.IO.File.Exists(path))
@@ -42,7 +30,7 @@ public class AudioPlayFromStorage : MonoBehaviour {
         }
 
         // Load a file
-        WWW request = new WWW(path);
+        WWW request = new WWW("file:///" + path);
 
         // wait until complete
         while (!request.isDone)
