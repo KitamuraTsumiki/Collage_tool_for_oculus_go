@@ -8,7 +8,9 @@
 		_Contrast("Contrast", Range(0, 2)) = 1
 		_Brightness("Brightness", Range(0, 2)) = 1
 		_StrokeWidth("Stroke Width", Range(0, 0.8)) = 0.1
-	}
+		_BrushPos("Brush Position", Vector) = (0, 0, 0, 0)
+		_BrushPosOnUV("Brush Position on UV", Vector) = (0, 0, 0, 0)
+ 	}
 
 	
 	SubShader {
@@ -28,11 +30,14 @@
 
 		struct Input {
 			float2 uv_MainTex;
+			float3 worldPos;
 		};
 
 		half _Glossiness;
 		half _Metallic;
 		fixed4 _Color;
+		fixed4 _BrushPos;
+		fixed4 _BrushPosOnUV;
 
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -48,6 +53,7 @@
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
+			//o.Alpha = distance(IN.worldPos,_BrushPos) < 0.1 ? 1 :  
 			o.Alpha = 1 - tex2D(_Alpha, IN.uv_MainTex);
 		}
 		ENDCG
@@ -65,6 +71,7 @@
 		half _Contrast;
 		half _Brightness;
 		half _StrokeWidth;
+		fixed4 _BrushPos;
 
 		struct Input {
 			float2 uv_MainTex;
